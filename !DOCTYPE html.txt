@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced BRB Widget</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            flex-direction: column;
+        }
+        #brb {
+            font-size: 2em;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 20px;
+            border: 2px solid white;
+            border-radius: 10px;
+            animation: rgbColors 3s infinite;
+            display: flex;
+            align-items: center;
+        }
+        @keyframes rgbColors {
+            0% { color: red; }
+            33% { color: green; }
+            66% { color: blue; }
+            100% { color: red; }
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .timer {
+            font-size: 1.5em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="brb">Be Right Back<span class="timer" id="timer"></span></div>
+    <div class="controls">
+        <button class="button" onclick="changeMessage()">Change Message</button>
+        <button class="button" onclick="toggleAnimation()">Pause/Resume</button>
+    </div>
+    <script>
+        let animationRunning = true;
+        let countdown = 600; // 10 minutes
+
+        function changeMessage() {
+            const newMessage = prompt('Enter a new message:');
+            if (newMessage) {
+                document.getElementById('brb').innerText = newMessage;
+            }
+        }
+
+        function toggleAnimation() {
+            const brbElement = document.getElementById('brb');
+            animationRunning = !animationRunning;
+            brbElement.style.animationPlayState = animationRunning ? 'running' : 'paused';
+        }
+
+        function updateTimer() {
+            const timerElement = document.getElementById('timer');
+            const minutes = Math.floor(countdown / 60);
+            const seconds = countdown % 60;
+            timerElement.innerText = ` ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            countdown--;
+            if (countdown < 0) {
+                clearInterval(timerInterval);
+                timerElement.innerText = " I'll be back soon!";
+            }
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Adding background music
+        const audio = new Audio('background-music.mp3'); // Make sure to include the audio file in your project
+        audio.loop = true;
+        audio.play();
+    </script>
+</body>
+</html>
